@@ -23,18 +23,31 @@ public class getData extends HttpServlet
     {
       res.setContentType("text/html");
       PrintWriter out = res.getWriter();
-      String city= req.getParameter("txtcity");
       try
       {
           Class.forName("com.mysql.jdbc.Driver");
-          Connection con=DriverManager.getConnection("jdbc:mysql://localhost?test?" + "user=");
+          Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3307/student","root","");
+          Statement stmt = con.createStatement();
+          ResultSet rs =stmt.executeQuery("select name,age,max(stud_marks) from tbl_student group by city_name");
+          String user="";
+          while (rs.next())
+          {
+              user=rs.getString(1)+ " : " +rs.getInt(2)+ " : " +rs.getInt(3)+ " : " +rs.getString(4);
+              out.println(user);
+
+          }
+          stmt.close();
+          con.close();
       }
       catch(Exception e)
       {
-          
+          out.println("Error : " +e.getMessage());
       }
-      
       
     }
 
 }
+
+
+
+
